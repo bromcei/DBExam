@@ -4,6 +4,7 @@ using DBExam.DbContextServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DBExam.Migrations
 {
     [DbContext(typeof(HoneyBadgerDbContext))]
-    partial class HoneyBadgerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230122220836_tenthMigration")]
+    partial class tenthMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -47,12 +49,12 @@ namespace DBExam.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("DepartmentDepartemntId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("HoneyName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("ProductDepartmentDepartemntId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal>("PurchasePrice")
                         .HasColumnType("decimal(18,2)");
@@ -62,7 +64,7 @@ namespace DBExam.Migrations
 
                     b.HasKey("HoneyId");
 
-                    b.HasIndex("DepartmentDepartemntId");
+                    b.HasIndex("ProductDepartmentDepartemntId");
 
                     b.ToTable("HoneyProducts");
                 });
@@ -108,9 +110,13 @@ namespace DBExam.Migrations
 
             modelBuilder.Entity("DBExam.Classes.HoneyProduct", b =>
                 {
-                    b.HasOne("DBExam.Classes.Department", null)
+                    b.HasOne("DBExam.Classes.Department", "ProductDepartment")
                         .WithMany("HoneyProducts")
-                        .HasForeignKey("DepartmentDepartemntId");
+                        .HasForeignKey("ProductDepartmentDepartemntId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ProductDepartment");
                 });
 
             modelBuilder.Entity("DBExam.Classes.Supplier", b =>

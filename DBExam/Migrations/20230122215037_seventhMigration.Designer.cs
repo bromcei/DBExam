@@ -4,6 +4,7 @@ using DBExam.DbContextServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DBExam.Migrations
 {
     [DbContext(typeof(HoneyBadgerDbContext))]
-    partial class HoneyBadgerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230122215037_seventhMigration")]
+    partial class seventhMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -43,11 +45,10 @@ namespace DBExam.Migrations
 
             modelBuilder.Entity("DBExam.Classes.HoneyProduct", b =>
                 {
-                    b.Property<Guid>("HoneyId")
-                        .ValueGeneratedOnAdd()
+                    b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("DepartmentDepartemntId")
+                    b.Property<Guid>("HoneyId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("HoneyName")
@@ -60,9 +61,7 @@ namespace DBExam.Migrations
                     b.Property<decimal>("SellPrice")
                         .HasColumnType("decimal(18,2)");
 
-                    b.HasKey("HoneyId");
-
-                    b.HasIndex("DepartmentDepartemntId");
+                    b.HasKey("Id");
 
                     b.ToTable("HoneyProducts");
                 });
@@ -93,13 +92,13 @@ namespace DBExam.Migrations
 
             modelBuilder.Entity("HoneyProductSupplier", b =>
                 {
-                    b.Property<Guid>("HoneyProductsHoneyId")
+                    b.Property<Guid>("HoneyProductsId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("SupplierListSupplierId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("HoneyProductsHoneyId", "SupplierListSupplierId");
+                    b.HasKey("HoneyProductsId", "SupplierListSupplierId");
 
                     b.HasIndex("SupplierListSupplierId");
 
@@ -108,9 +107,13 @@ namespace DBExam.Migrations
 
             modelBuilder.Entity("DBExam.Classes.HoneyProduct", b =>
                 {
-                    b.HasOne("DBExam.Classes.Department", null)
+                    b.HasOne("DBExam.Classes.Department", "ProductDepartment")
                         .WithMany("HoneyProducts")
-                        .HasForeignKey("DepartmentDepartemntId");
+                        .HasForeignKey("Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ProductDepartment");
                 });
 
             modelBuilder.Entity("DBExam.Classes.Supplier", b =>
@@ -124,7 +127,7 @@ namespace DBExam.Migrations
                 {
                     b.HasOne("DBExam.Classes.HoneyProduct", null)
                         .WithMany()
-                        .HasForeignKey("HoneyProductsHoneyId")
+                        .HasForeignKey("HoneyProductsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

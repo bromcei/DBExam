@@ -4,6 +4,7 @@ using DBExam.DbContextServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DBExam.Migrations
 {
     [DbContext(typeof(HoneyBadgerDbContext))]
-    partial class HoneyBadgerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230122211513_sixthMigration")]
+    partial class sixthMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -24,7 +26,7 @@ namespace DBExam.Migrations
 
             modelBuilder.Entity("DBExam.Classes.Department", b =>
                 {
-                    b.Property<Guid>("DepartemntId")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
@@ -36,23 +38,23 @@ namespace DBExam.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("DepartemntId");
+                    b.HasKey("Id");
 
                     b.ToTable("Departments");
                 });
 
             modelBuilder.Entity("DBExam.Classes.HoneyProduct", b =>
                 {
-                    b.Property<Guid>("HoneyId")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("DepartmentDepartemntId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("HoneyName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("ProductDepartmentId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal>("PurchasePrice")
                         .HasColumnType("decimal(18,2)");
@@ -60,16 +62,16 @@ namespace DBExam.Migrations
                     b.Property<decimal>("SellPrice")
                         .HasColumnType("decimal(18,2)");
 
-                    b.HasKey("HoneyId");
+                    b.HasKey("Id");
 
-                    b.HasIndex("DepartmentDepartemntId");
+                    b.HasIndex("ProductDepartmentId");
 
                     b.ToTable("HoneyProducts");
                 });
 
             modelBuilder.Entity("DBExam.Classes.Supplier", b =>
                 {
-                    b.Property<Guid>("SupplierId")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
@@ -77,60 +79,64 @@ namespace DBExam.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("DepartmentDepartemntId")
+                    b.Property<Guid?>("DepartmentId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("SupplierName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("SupplierId");
+                    b.HasKey("Id");
 
-                    b.HasIndex("DepartmentDepartemntId");
+                    b.HasIndex("DepartmentId");
 
                     b.ToTable("Suppliers");
                 });
 
             modelBuilder.Entity("HoneyProductSupplier", b =>
                 {
-                    b.Property<Guid>("HoneyProductsHoneyId")
+                    b.Property<Guid>("HoneyProductsId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("SupplierListSupplierId")
+                    b.Property<Guid>("SupplierListId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("HoneyProductsHoneyId", "SupplierListSupplierId");
+                    b.HasKey("HoneyProductsId", "SupplierListId");
 
-                    b.HasIndex("SupplierListSupplierId");
+                    b.HasIndex("SupplierListId");
 
                     b.ToTable("HoneyProductSupplier");
                 });
 
             modelBuilder.Entity("DBExam.Classes.HoneyProduct", b =>
                 {
-                    b.HasOne("DBExam.Classes.Department", null)
+                    b.HasOne("DBExam.Classes.Department", "ProductDepartment")
                         .WithMany("HoneyProducts")
-                        .HasForeignKey("DepartmentDepartemntId");
+                        .HasForeignKey("ProductDepartmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ProductDepartment");
                 });
 
             modelBuilder.Entity("DBExam.Classes.Supplier", b =>
                 {
                     b.HasOne("DBExam.Classes.Department", null)
                         .WithMany("Suppliers")
-                        .HasForeignKey("DepartmentDepartemntId");
+                        .HasForeignKey("DepartmentId");
                 });
 
             modelBuilder.Entity("HoneyProductSupplier", b =>
                 {
                     b.HasOne("DBExam.Classes.HoneyProduct", null)
                         .WithMany()
-                        .HasForeignKey("HoneyProductsHoneyId")
+                        .HasForeignKey("HoneyProductsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("DBExam.Classes.Supplier", null)
                         .WithMany()
-                        .HasForeignKey("SupplierListSupplierId")
+                        .HasForeignKey("SupplierListId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

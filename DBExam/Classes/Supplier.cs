@@ -10,20 +10,24 @@ namespace DBExam.Classes
     public class Supplier
     {
         [Key]
-        public Guid Id { get; set; }
+        public Guid SupplierId { get; set; }
         public string SupplierName { get; set; }
         public string Address { get; set; }
-        public List<Product> Products { get; set; }
+        public List<HoneyProduct> HoneyProducts { get; set; }
         public Supplier(string supplierName, string address)
         {
-            Id = Guid.NewGuid();
+            SupplierId = Guid.NewGuid();
             SupplierName = supplierName;
             Address = address;
-            Products = new List<Product>();
+            HoneyProducts = new List<HoneyProduct>();
         }
-        public void AddProduct(Product product)
+        public void AddProduct(HoneyProduct product)
         {
-            Products.Add(product);
+            HoneyProducts.Add(product);
+        }
+        public void AddProducts(List<HoneyProduct> products)
+        {
+            HoneyProducts.AddRange(products);
         }
     }
 }

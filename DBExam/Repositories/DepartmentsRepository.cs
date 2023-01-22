@@ -29,6 +29,12 @@ namespace DBExam.Repositories
             HoneyBadgerDB.Departments.Add(department);
             HoneyBadgerDB.SaveChanges();
         }
-        
+        public void AddProductsToDepartment(string departmentName, List<HoneyProduct> products)
+        {
+            Department department = Retrieve(departmentName);
+            department.HoneyProducts = products;
+            HoneyBadgerDB.SaveChanges();
+        }
+
     }
 }

@@ -15,7 +15,9 @@ namespace DBExam.Classes
         public string HoneyName { get; set; }
         public decimal PurchasePrice { get; set; }
         public decimal SellPrice { get; set; }
-//        public Department ProductDepartment { get; set; }
+        [ForeignKey("Department")]
+        public Guid DepartmentID { get; set; }
+        public Department ProductDepartment { get; set; }
         public List<Supplier> SupplierList { get; set; }
 
         public HoneyProduct() { }

@@ -11,18 +11,17 @@ namespace DBExam.Classes
     public class HoneyProduct
     {
         [Key]
-        public Guid HoneyId { get; set; }
+        public int HoneyId { get; set; }
         public string HoneyName { get; set; }
         public decimal PurchasePrice { get; set; }
         public decimal SellPrice { get; set; }
-        public Guid? DepartmentID { get; set; }
+        public int DepartmentID { get; set; }
         public Department ProductDepartment { get; set; }
         public List<HoneyProductSupplier> HoneyProductSuppliers { get; set; }
 
         public HoneyProduct() { }
         public HoneyProduct(string honeyName, decimal purchasePrice)
         {
-            HoneyId = Guid.NewGuid();
             HoneyName = honeyName;
             PurchasePrice = purchasePrice;
             SellPrice = purchasePrice * 2.5M;

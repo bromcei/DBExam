@@ -10,26 +10,17 @@ namespace DBExam.Classes
     public class Department
     {
         [Key]
-        public Guid DepartmentId { get; set; }
+        public int DepartmentId { get; set; }
         public string DepartmentName { get; set; }
         public string DepartmentAddress { get; set; }
-        public List<Supplier> Suppliers { get; set; }
+        public List<DepartmentSupplier> DepartmentSuppliers { get; set; }
         public List<HoneyProduct> HoneyProducts { get; set; }
         public Department(string departmentName, string departmentAddress)
         {
-            DepartmentId = Guid.NewGuid();
             DepartmentName = departmentName;
             DepartmentAddress = departmentAddress;
-            Suppliers = new List<Supplier>();
+            DepartmentSuppliers = new List<DepartmentSupplier>();
             HoneyProducts = new List<HoneyProduct>();
-        }
-        public void AddSuplier(Supplier suplier)
-        {
-            Suppliers.Add(suplier);
-        }
-        public void AddSupliers(List<Supplier> supliers)
-        {
-            Suppliers.AddRange(supliers);
         }
         public void AddProduct(HoneyProduct product)
         {

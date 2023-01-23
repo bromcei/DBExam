@@ -16,6 +16,7 @@ namespace DBExam.DbContextServer
         public DbSet<Supplier> Suppliers { get; set; }
         public DbSet<HoneyProduct> HoneyProducts { get; set; }
         public DbSet<HoneyProductSupplier> HoneyProductsSupliers { get; set; }
+        public DbSet<DepartmentSupplier> DepartmentSuppliers { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
         {
@@ -25,8 +26,8 @@ namespace DBExam.DbContextServer
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<HoneyProduct>().HasOne<Department>(p => p.ProductDepartment).WithMany(d => d.HoneyProducts).HasForeignKey(p => p.DepartmentID).OnDelete(DeleteBehavior.Restrict);
-            modelBuilder.Entity<Supplier>().HasOne<Department>(s => s.SupplierDepartment).WithMany(d => d.Suppliers).HasForeignKey(s => s.DepartmentID).OnDelete(DeleteBehavior.Restrict);
-            modelBuilder.Entity<HoneyProductSupplier>().HasKey(ps => new { ps.HoneyId, ps.SupplierId });
+            modelBuilder.Entity<HoneyProductSupplier>().HasKey(ps => new { ps.HoneyProductId, ps.SupplierId });
+            modelBuilder.Entity<DepartmentSupplier>().HasKey(ds => new {ds.DepartmentId, ds.SupplierId});
         }
     }
 }

@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace DBExam.Classes
 {
-    public class HoneyProductSupplier
+    public class DepartmentSupplier
     {
-        public int HoneyProductId { get; set; }
-        public HoneyProduct HoneyProduct { get; set; }
+        public int DepartmentId { get; set; }
+        public Department Department { get; set; }
         public int SupplierId { get; set; }
         public Supplier Supplier { get; set; }
     }

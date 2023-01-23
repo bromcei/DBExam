@@ -10,14 +10,14 @@ namespace DBExam.Classes
     public class Department
     {
         [Key]
-        public Guid DepartemntId { get; set; }
+        public Guid DepartmentId { get; set; }
         public string DepartmentName { get; set; }
         public string DepartmentAddress { get; set; }
         public List<Supplier> Suppliers { get; set; }
         public List<HoneyProduct> HoneyProducts { get; set; }
         public Department(string departmentName, string departmentAddress)
         {
-            DepartemntId = Guid.NewGuid();
+            DepartmentId = Guid.NewGuid();
             DepartmentName = departmentName;
             DepartmentAddress = departmentAddress;
             Suppliers = new List<Supplier>();

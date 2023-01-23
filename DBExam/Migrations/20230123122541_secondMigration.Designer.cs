@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DBExam.Migrations
 {
     [DbContext(typeof(HoneyBadgerDbContext))]
-    [Migration("20230122222406_eleventhMigration")]
-    partial class eleventhMigration
+    [Migration("20230123122541_secondMigration")]
+    partial class secondMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -26,7 +26,7 @@ namespace DBExam.Migrations
 
             modelBuilder.Entity("DBExam.Classes.Department", b =>
                 {
-                    b.Property<Guid>("DepartemntId")
+                    b.Property<Guid>("DepartmentId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
@@ -38,7 +38,7 @@ namespace DBExam.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("DepartemntId");
+                    b.HasKey("DepartmentId");
 
                     b.ToTable("Departments");
                 });
@@ -49,7 +49,8 @@ namespace DBExam.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("DepartmentDepartemntId")
+                    b.Property<Guid?>("DepartmentID")
+                        .IsRequired()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("HoneyName")
@@ -64,9 +65,29 @@ namespace DBExam.Migrations
 
                     b.HasKey("HoneyId");
 
-                    b.HasIndex("DepartmentDepartemntId");
+                    b.HasIndex("DepartmentID");
 
                     b.ToTable("HoneyProducts");
+                });
+
+            modelBuilder.Entity("DBExam.Classes.HoneyProductSupplier", b =>
+                {
+                    b.Property<Guid>("HoneyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("SupplierId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("HoneyProductHoneyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("HoneyId", "SupplierId");
+
+                    b.HasIndex("HoneyProductHoneyId");
+
+                    b.HasIndex("SupplierId");
+
+                    b.ToTable("HoneyProductsSupliers");
                 });
 
             modelBuilder.Entity("DBExam.Classes.Supplier", b =>
@@ -79,7 +100,7 @@ namespace DBExam.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("DepartmentDepartemntId")
+                    b.Property<Guid>("DepartmentID")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("SupplierName")
@@ -88,53 +109,50 @@ namespace DBExam.Migrations
 
                     b.HasKey("SupplierId");
 
-                    b.HasIndex("DepartmentDepartemntId");
+                    b.HasIndex("DepartmentID");
 
                     b.ToTable("Suppliers");
                 });
 
-            modelBuilder.Entity("HoneyProductSupplier", b =>
-                {
-                    b.Property<Guid>("HoneyProductsHoneyId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("SupplierListSupplierId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("HoneyProductsHoneyId", "SupplierListSupplierId");
-
-                    b.HasIndex("SupplierListSupplierId");
-
-                    b.ToTable("HoneyProductSupplier");
-                });
-
             modelBuilder.Entity("DBExam.Classes.HoneyProduct", b =>
                 {
-                    b.HasOne("DBExam.Classes.Department", null)
+                    b.HasOne("DBExam.Classes.Department", "ProductDepartment")
                         .WithMany("HoneyProducts")
-                        .HasForeignKey("DepartmentDepartemntId");
+                        .HasForeignKey("DepartmentID")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("ProductDepartment");
+                });
+
+            modelBuilder.Entity("DBExam.Classes.HoneyProductSupplier", b =>
+                {
+                    b.HasOne("DBExam.Classes.HoneyProduct", "HoneyProduct")
+                        .WithMany("HoneyProductSuppliers")
+                        .HasForeignKey("HoneyProductHoneyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DBExam.Classes.Supplier", "Supplier")
+                        .WithMany("HoneyProductSuppliers")
+                        .HasForeignKey("SupplierId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("HoneyProduct");
+
+                    b.Navigation("Supplier");
                 });
 
             modelBuilder.Entity("DBExam.Classes.Supplier", b =>
                 {
-                    b.HasOne("DBExam.Classes.Department", null)
+                    b.HasOne("DBExam.Classes.Department", "SupplierDepartment")
                         .WithMany("Suppliers")
-                        .HasForeignKey("DepartmentDepartemntId");
-                });
-
-            modelBuilder.Entity("HoneyProductSupplier", b =>
-                {
-                    b.HasOne("DBExam.Classes.HoneyProduct", null)
-                        .WithMany()
-                        .HasForeignKey("HoneyProductsHoneyId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey("DepartmentID")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("DBExam.Classes.Supplier", null)
-                        .WithMany()
-                        .HasForeignKey("SupplierListSupplierId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("SupplierDepartment");
                 });
 
             modelBuilder.Entity("DBExam.Classes.Department", b =>
@@ -142,6 +160,16 @@ namespace DBExam.Migrations
                     b.Navigation("HoneyProducts");
 
                     b.Navigation("Suppliers");
+                });
+
+            modelBuilder.Entity("DBExam.Classes.HoneyProduct", b =>
+                {
+                    b.Navigation("HoneyProductSuppliers");
+                });
+
+            modelBuilder.Entity("DBExam.Classes.Supplier", b =>
+                {
+                    b.Navigation("HoneyProductSuppliers");
                 });
 #pragma warning restore 612, 618
         }

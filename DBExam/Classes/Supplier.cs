@@ -13,21 +13,16 @@ namespace DBExam.Classes
         public Guid SupplierId { get; set; }
         public string SupplierName { get; set; }
         public string Address { get; set; }
-        public List<HoneyProduct> HoneyProducts { get; set; }
+        public Guid DepartmentID { get; set; }
+        public Department? SupplierDepartment { get; set; }
+        public List<HoneyProductSupplier> HoneyProductSuppliers { get; set; }
+        public Supplier() { }
         public Supplier(string supplierName, string address)
         {
             SupplierId = Guid.NewGuid();
             SupplierName = supplierName;
             Address = address;
-            HoneyProducts = new List<HoneyProduct>();
-        }
-        public void AddProduct(HoneyProduct product)
-        {
-            HoneyProducts.Add(product);
-        }
-        public void AddProducts(List<HoneyProduct> products)
-        {
-            HoneyProducts.AddRange(products);
+            HoneyProductSuppliers = new List<HoneyProductSupplier>(){ };
         }
     }
 }

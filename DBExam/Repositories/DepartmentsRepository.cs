@@ -18,23 +18,29 @@ namespace DBExam.Repositories
         }
         public List<Department> Retrieve()
         {
-            return HoneyBadgerDB.Departments.ToList(); 
+            List<Department> departments;
+            using (HoneyBadgerDB)
+            {
+                departments = HoneyBadgerDB.Departments.ToList();
+            }
+            return departments; 
         }
         public Department Retrieve(string departmentName)
         {
-            return HoneyBadgerDB.Departments.Where(d => d.DepartmentName == departmentName).FirstOrDefault();
+            Department department;
+            using (HoneyBadgerDB)
+            {
+                department = HoneyBadgerDB.Departments.FirstOrDefault(d => d.DepartmentName == departmentName);
+            }
+            return department;
         }
         public void AddDepartment(Department department)
         {
-            HoneyBadgerDB.Departments.Add(department);
-            HoneyBadgerDB.SaveChanges();
+            using (HoneyBadgerDB)
+            {
+                HoneyBadgerDB.Departments.Add(department);
+                HoneyBadgerDB.SaveChanges();
+            }
         }
-        public void AddProductsToDepartment(string departmentName, List<HoneyProduct> products)
-        {
-            Department department = Retrieve(departmentName);
-            department.HoneyProducts = products;
-            HoneyBadgerDB.SaveChanges();
-        }
-
     }
 }

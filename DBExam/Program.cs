@@ -3,9 +3,14 @@
 using DBExam.Classes;
 using DBExam.DbContextServer;
 using DBExam.Repositories;
+using DBExam.Services;
 
+RecordEditorService RecordEditorService = new RecordEditorService();
 
+//RecordEditorService.AddNewDepartment(new Department("Kaunas", "Laisves al. 1, Kaunas"));
+RecordEditorService.AddNewHoneyProduct(new HoneyProduct("Liepu Medus", 1.5M), "Kaunas");
 
+/*
 SuppliersRepository Suppliers = new SuppliersRepository();
 HoneyProductsRepository HoneyProducts = new HoneyProductsRepository();
 DepartmentsRepository Departments = new DepartmentsRepository();
@@ -22,7 +27,7 @@ using (honeyDb)
 
     honeyDb.SaveChanges();
 }
-
+*/
 //honeyDb.Departments
 /*
 Department vilnius = new ("Vilnius", "Gedimino pr.1, Vilnius");

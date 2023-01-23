@@ -19,16 +19,29 @@ namespace DBExam.Repositories
         
         public List<Supplier> Retrieve()
         {
-            return HoneyBadgerDB.Suppliers.ToList();
+            List<Supplier> supplierList;
+            using (HoneyBadgerDB)
+            {
+                supplierList = HoneyBadgerDB.Suppliers.ToList();
+            }
+            return supplierList;
         }
         public Supplier Retrieve(string suplierName)
         {
-            return HoneyBadgerDB.Suppliers.Where(s => s.SupplierName == suplierName).FirstOrDefault();
+            Supplier supplier;
+            using (HoneyBadgerDB)
+            {
+                supplier = HoneyBadgerDB.Suppliers.FirstOrDefault(s => s.SupplierName == suplierName);
+            }
+            return supplier;
         }
         public void AddNewSupplier(Supplier suplier)
         {
-            HoneyBadgerDB.Suppliers.Add(suplier);
-            HoneyBadgerDB.SaveChanges();
+            using (HoneyBadgerDB)
+            {
+                HoneyBadgerDB.Suppliers.Add(suplier);
+                HoneyBadgerDB.SaveChanges();
+            }
         }
     }
 }

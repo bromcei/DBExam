@@ -19,21 +19,40 @@ namespace DBExam.Repositories
 
         public List<HoneyProduct> Retrieve()
         {
-            return HoneyBadgerDB.HoneyProducts.ToList();
+            List<HoneyProduct> products;
+            using (HoneyBadgerDB)
+            {
+                products = HoneyBadgerDB.HoneyProducts.ToList();
+            }
+            return products;
         }
         public HoneyProduct Retrieve(string productName)
         {
-            return HoneyBadgerDB.HoneyProducts.Where(s => s.HoneyName == productName).FirstOrDefault();
+            HoneyProduct product;
+            using (HoneyBadgerDB)
+            {
+                product = HoneyBadgerDB.HoneyProducts.FirstOrDefault(s => s.HoneyName == productName);
+            }
+            return product;
         }
         public void AddNewProduct(HoneyProduct product)
         {
-            HoneyBadgerDB.HoneyProducts.Add(product);
-            HoneyBadgerDB.SaveChanges();
+            
+            using (HoneyBadgerDB)
+            {
+                HoneyBadgerDB.HoneyProducts.Add(product);
+                HoneyBadgerDB.SaveChanges();
+            }
+            
         }
         public void AddNewProducts(List<HoneyProduct> products)
         {
-            HoneyBadgerDB.HoneyProducts.AddRange(products);
-            HoneyBadgerDB.SaveChanges();
+            using (HoneyBadgerDB)
+            {
+                HoneyBadgerDB.HoneyProducts.AddRange(products);
+                HoneyBadgerDB.SaveChanges();
+            }
+            
         }
     }
 }

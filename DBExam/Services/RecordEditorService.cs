@@ -1,6 +1,7 @@
 ﻿using DBExam.Classes;
 using DBExam.DbContextServer;
 using DBExam.Repositories;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,10 +27,6 @@ namespace DBExam.Services
         {
             DepartmentsRepository.AddDepartment(department);
         }
-        public Department GetDepartment(string departmentName)
-        {
-            return DepartmentsRepository.Retrieve(departmentName);
-        }
         public List<Department> GetAllDepartments()
         {
             return DepartmentsRepository.Retrieve();
@@ -45,27 +42,98 @@ namespace DBExam.Services
                     HoneyBadgerDB.SaveChanges();
                 }
             }
-                
         }
-        public HoneyProduct GetHoneyProduct(string honeyProductName)
-        {
-            return HoneyProductsRepository.Retrieve(honeyProductName);
-        }
-        public List<HoneyProduct> GetAllHoneyProducts()
-        {
-            return HoneyProductsRepository.Retrieve();
-        }
-        public void AddNewSupplier(Supplier supplier)
+        public void AddNewHoneySupplier(Supplier supplier)
         {
             SuppliersRepository.AddNewSupplier(supplier);
         }
-        public Supplier GetSupplier(string supplierName)
+        public void AssignSupplierToDepartment(string supplierName, string departmentName)
         {
-            return SuppliersRepository.Retrieve(supplierName);
+            DepartmentSupplier departSupplier = new DepartmentSupplier();
+            using (HoneyBadgerDB)
+            {
+                Supplier supplier = HoneyBadgerDB.Suppliers.FirstOrDefault(s => s.SupplierName == departmentName);
+                Department department = HoneyBadgerDB.Departments.FirstOrDefault(d => d.DepartmentName == departmentName);
+                if (department != null && supplier != null)
+                {
+                    departSupplier.Supplier = supplier;
+                    departSupplier.Department = department;  
+                    HoneyBadgerDB.SaveChanges();
+                }
+                else
+                {
+                    Console.WriteLine("Department or Supplier not found in DB");
+                }
+            }
         }
-        public List<Supplier> GetAllSuppliers()
+        public void AssignSupplierToDepartment(int supplierID, int departmentID)
         {
-            return SuppliersRepository.Retrieve();
+            DepartmentSupplier departSupplier = new DepartmentSupplier();
+            using (HoneyBadgerDB)
+            {
+                Supplier supplier = HoneyBadgerDB.Suppliers.FirstOrDefault(s => s.SupplierId == supplierID);
+                Department department = HoneyBadgerDB.Departments.FirstOrDefault(d => d.DepartmentId == departmentID);
+                if (department != null && supplier != null)
+                {
+                    departSupplier.Supplier = supplier;
+                    departSupplier.Department = department;
+                    HoneyBadgerDB.SaveChanges();
+                }
+                else
+                {
+                    Console.WriteLine("Department or Supplier not found in DB");
+                }
+            }
+        }
+        public void AssignDepartmentSuppliersToProduct(int productID)
+        {
+            using (HoneyBadgerDB)
+            {
+                HoneyProduct product = HoneyBadgerDB.HoneyProducts.FirstOrDefault(p => p.HoneyId == productID);
+                if (product != null)
+                {
+                    Department prodDepartment = HoneyBadgerDB.Departments.FirstOrDefault(d => d.DepartmentId == product.DepartmentID);
+                    List<DepartmentSupplier> departmentSuppliers = prodDepartment.DepartmentSuppliers;
+                    List<HoneyProductSupplier> productSuppliers = new List<HoneyProductSupplier>() { };
+                    //Delete previous suppliers 
+                    //HoneyBadgerDB.HoneyProductsSupliers.RemoveRange(HoneyBadgerDB.HoneyProductsSupliers.Where(ps => ps.HoneyProductId == productID)); If it is big set it could run out of memory
+                    HoneyBadgerDB.HoneyProductsSupliers.FromSqlRaw($"DELETE FROM dbo.HoneyProductsSupliers WHERE HoneyProductId = {productID}");
+
+
+                    foreach (DepartmentSupplier departmentSupplier in departmentSuppliers)
+                    {
+                        HoneyProductSupplier honeyProductSupplier = new HoneyProductSupplier();
+                        honeyProductSupplier.Supplier = departmentSupplier.Supplier;
+                        honeyProductSupplier.HoneyProduct = product;
+                        productSuppliers.Add(honeyProductSupplier);
+                    }
+                    product.HoneyProductSuppliers = productSuppliers;
+                    HoneyBadgerDB.SaveChanges();
+                }
+
+                else
+                {
+                    Console.WriteLine("Honey product not found");
+                }
+            }
+        }
+        public void ChangeProductDepartmentAndSuppliers(int productID, int newDepartmentID)
+        {
+            using (HoneyBadgerDB)
+            {
+                HoneyProduct product = HoneyBadgerDB.HoneyProducts.FirstOrDefault(p => p.HoneyId == productID);
+                Department newDepartment = HoneyBadgerDB.Departments.FirstOrDefault(d => d.DepartmentId == newDepartmentID);
+                if (product != null && newDepartment != null)
+                {
+                    product.ProductDepartment = newDepartment;
+                    HoneyBadgerDB.SaveChanges();
+                    AssignDepartmentSuppliersToProduct(productID);
+                }
+                else
+                {
+                    Console.WriteLine("Honey product or Department not found");
+                }
+            }
         }
     }
 }

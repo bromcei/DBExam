@@ -43,10 +43,10 @@ namespace DBExam.Services
             {
                 List<Supplier> departmentSuppliers = HoneyBadgerDB.Suppliers.Where(s => s.DepartmentSuppliers.Any(d => d.DepartmentId == departmentID)).ToList();
                 string departmentName = DepartmentsRepository.Retrieve(departmentID).DepartmentName;
-                ConsoleTable resString = new ConsoleTable("HoneyId", "HoneyName", "PurchasePrice", "SellPrice", "DepartmentName");
-                foreach (HoneyProduct product in departmentProducts)
+                ConsoleTable resString = new ConsoleTable("SupplierId", "SupplierName", "SupplierAddress", "DepartmentName");
+                foreach (Supplier supplier in departmentSuppliers)
                 {
-                    resString.AddRow(product.HoneyId, product.HoneyName, product.PurchasePrice, product.SellPrice, departmentName);
+                    resString.AddRow(supplier.SupplierId, supplier.SupplierName, supplier.Address, departmentName);
                 }
                 return resString;
             }

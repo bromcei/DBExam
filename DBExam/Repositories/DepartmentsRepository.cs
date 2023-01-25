@@ -34,6 +34,15 @@ namespace DBExam.Repositories
             }
             return department;
         }
+        public Department Retrieve(int departmentID)
+        {
+            Department department;
+            using (HoneyBadgerDB)
+            {
+                department = HoneyBadgerDB.Departments.FirstOrDefault(d => d.DepartmentId == departmentID);
+            }
+            return department;
+        }
         public void AddDepartment(Department department)
         {
             using (HoneyBadgerDB)

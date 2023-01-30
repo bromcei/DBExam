@@ -12,14 +12,10 @@ namespace DBExam.Repositories
     {
         public HoneyBadgerDbContext HoneyBadgerDB { get; set; }
 
-        public HoneyProductsRepository()
-        {
-            HoneyBadgerDB = new HoneyBadgerDbContext();
-        }
-
         public List<HoneyProduct> Retrieve()
         {
             List<HoneyProduct> products;
+            HoneyBadgerDbContext HoneyBadgerDB = new HoneyBadgerDbContext();
             using (HoneyBadgerDB)
             {
                 products = HoneyBadgerDB.HoneyProducts.ToList();
@@ -29,15 +25,27 @@ namespace DBExam.Repositories
         public HoneyProduct Retrieve(string productName)
         {
             HoneyProduct product;
+            HoneyBadgerDbContext HoneyBadgerDB = new HoneyBadgerDbContext();
             using (HoneyBadgerDB)
             {
                 product = HoneyBadgerDB.HoneyProducts.FirstOrDefault(s => s.HoneyName == productName);
             }
             return product;
         }
+        public HoneyProduct Retrieve(int productID)
+        {
+            HoneyProduct product;
+            HoneyBadgerDbContext HoneyBadgerDB = new HoneyBadgerDbContext();
+            using (HoneyBadgerDB)
+            {
+                product = HoneyBadgerDB.HoneyProducts.FirstOrDefault(s => s.HoneyId == productID);
+            }
+            return product;
+        }
         public void AddNewProduct(HoneyProduct product)
         {
-            
+
+            HoneyBadgerDbContext HoneyBadgerDB = new HoneyBadgerDbContext();
             using (HoneyBadgerDB)
             {
                 HoneyBadgerDB.HoneyProducts.Add(product);
@@ -47,6 +55,7 @@ namespace DBExam.Repositories
         }
         public void AddNewProducts(List<HoneyProduct> products)
         {
+            HoneyBadgerDbContext HoneyBadgerDB = new HoneyBadgerDbContext();
             using (HoneyBadgerDB)
             {
                 HoneyBadgerDB.HoneyProducts.AddRange(products);

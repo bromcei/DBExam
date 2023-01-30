@@ -20,8 +20,8 @@ namespace DBExam.DbContextServer
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
         {
-            options.UseSqlServer($@"Data Source=localhost;Initial Catalog=HoneyBadger;Integrated Security=True");
-            //options.UseSqlServer($@"Data Source=TOMASC-PC\SQLEXPRESS;Initial Catalog=HoneyBadger;Integrated Security=True");
+            //options.UseSqlServer($@"Data Source=localhost;Initial Catalog=HoneyBadger;Integrated Security=True");
+            options.UseSqlServer($@"Data Source=TOMASC-PC\SQLEXPRESS;Initial Catalog=HoneyBadger;Integrated Security=True");
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

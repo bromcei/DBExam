@@ -12,13 +12,11 @@ namespace DBExam.Repositories
     public class DepartmentsRepository
     {
         public HoneyBadgerDbContext HoneyBadgerDB { get; set; }
-        public DepartmentsRepository()
-        {
-            HoneyBadgerDB = new HoneyBadgerDbContext();
-        }
+
         public List<Department> Retrieve()
         {
             List<Department> departments;
+            HoneyBadgerDbContext HoneyBadgerDB = new HoneyBadgerDbContext();
             using (HoneyBadgerDB)
             {
                 departments = HoneyBadgerDB.Departments.ToList();
@@ -28,6 +26,7 @@ namespace DBExam.Repositories
         public Department Retrieve(string departmentName)
         {
             Department department;
+            HoneyBadgerDbContext HoneyBadgerDB = new HoneyBadgerDbContext();
             using (HoneyBadgerDB)
             {
                 department = HoneyBadgerDB.Departments.FirstOrDefault(d => d.DepartmentName == departmentName);
@@ -37,6 +36,7 @@ namespace DBExam.Repositories
         public Department Retrieve(int departmentID)
         {
             Department department;
+            HoneyBadgerDbContext HoneyBadgerDB = new HoneyBadgerDbContext();
             using (HoneyBadgerDB)
             {
                 department = HoneyBadgerDB.Departments.FirstOrDefault(d => d.DepartmentId == departmentID);
@@ -45,6 +45,7 @@ namespace DBExam.Repositories
         }
         public void AddDepartment(Department department)
         {
+            HoneyBadgerDbContext HoneyBadgerDB = new HoneyBadgerDbContext();
             using (HoneyBadgerDB)
             {
                 HoneyBadgerDB.Departments.Add(department);

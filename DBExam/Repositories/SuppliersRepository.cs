@@ -10,16 +10,10 @@ namespace DBExam.Repositories
 {
     public class SuppliersRepository
     {
-        public HoneyBadgerDbContext HoneyBadgerDB { get; set; }
-
-        public SuppliersRepository()
-        {
-            HoneyBadgerDB = new HoneyBadgerDbContext();
-        }
-        
         public List<Supplier> Retrieve()
         {
             List<Supplier> supplierList;
+            HoneyBadgerDbContext HoneyBadgerDB = new HoneyBadgerDbContext();
             using (HoneyBadgerDB)
             {
                 supplierList = HoneyBadgerDB.Suppliers.ToList();
@@ -29,6 +23,7 @@ namespace DBExam.Repositories
         public Supplier Retrieve(string suplierName)
         {
             Supplier supplier;
+            HoneyBadgerDbContext HoneyBadgerDB = new HoneyBadgerDbContext();
             using (HoneyBadgerDB)
             {
                 supplier = HoneyBadgerDB.Suppliers.FirstOrDefault(s => s.SupplierName == suplierName);
@@ -37,6 +32,7 @@ namespace DBExam.Repositories
         }
         public void AddNewSupplier(Supplier suplier)
         {
+            HoneyBadgerDbContext HoneyBadgerDB = new HoneyBadgerDbContext();
             using (HoneyBadgerDB)
             {
                 HoneyBadgerDB.Suppliers.Add(suplier);

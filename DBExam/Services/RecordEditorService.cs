@@ -15,13 +15,11 @@ namespace DBExam.Services
         public DepartmentsRepository DepartmentsRepository { get; set; }
         public HoneyProductsRepository HoneyProductsRepository { get; set; }
         public SuppliersRepository SuppliersRepository { get; set; }
-        public HoneyBadgerDbContext HoneyBadgerDB { get; set; }
         public RecordEditorService()
         {
             DepartmentsRepository = new DepartmentsRepository();
             HoneyProductsRepository = new HoneyProductsRepository();
             SuppliersRepository = new SuppliersRepository();
-            HoneyBadgerDB = new HoneyBadgerDbContext();
         }
         public void AddNewDepartment(Department department)
         {
@@ -33,9 +31,23 @@ namespace DBExam.Services
         }
         public void AddNewHoneyProduct(HoneyProduct honeyProduct, string departmentName)
         {
+            HoneyBadgerDbContext HoneyBadgerDB = new HoneyBadgerDbContext();
             using (HoneyBadgerDB)
             {
                 Department department = HoneyBadgerDB.Departments.FirstOrDefault(d => d.DepartmentName == departmentName);
+                if (department != null)
+                {
+                    department.HoneyProducts.Add(honeyProduct);
+                    HoneyBadgerDB.SaveChanges();
+                }
+            }
+        }
+        public void AddNewHoneyProduct(HoneyProduct honeyProduct, int departmentID)
+        {
+            HoneyBadgerDbContext HoneyBadgerDB = new HoneyBadgerDbContext();
+            using (HoneyBadgerDB)
+            {
+                Department department = HoneyBadgerDB.Departments.FirstOrDefault(d => d.DepartmentId == departmentID);
                 if (department != null)
                 {
                     department.HoneyProducts.Add(honeyProduct);
@@ -50,6 +62,7 @@ namespace DBExam.Services
         public void AssignSupplierToDepartment(string supplierName, string departmentName)
         {
             DepartmentSupplier departSupplier = new DepartmentSupplier();
+            HoneyBadgerDbContext HoneyBadgerDB = new HoneyBadgerDbContext();
             using (HoneyBadgerDB)
             {
                 Supplier supplier = HoneyBadgerDB.Suppliers.FirstOrDefault(s => s.SupplierName == departmentName);
@@ -69,6 +82,7 @@ namespace DBExam.Services
         public void AssignSupplierToDepartment(int supplierID, int departmentID)
         {
             DepartmentSupplier departSupplier = new DepartmentSupplier();
+            HoneyBadgerDbContext HoneyBadgerDB = new HoneyBadgerDbContext();
             using (HoneyBadgerDB)
             {
                 Supplier supplier = HoneyBadgerDB.Suppliers.FirstOrDefault(s => s.SupplierId == supplierID);
@@ -87,6 +101,7 @@ namespace DBExam.Services
         }
         public void AssignDepartmentSuppliersToProduct(int productID)
         {
+            HoneyBadgerDbContext HoneyBadgerDB = new HoneyBadgerDbContext();
             using (HoneyBadgerDB)
             {
                 HoneyProduct product = HoneyBadgerDB.HoneyProducts.FirstOrDefault(p => p.HoneyId == productID);
@@ -119,6 +134,7 @@ namespace DBExam.Services
         }
         public void ChangeProductDepartmentAndSuppliers(int productID, int newDepartmentID)
         {
+            HoneyBadgerDbContext HoneyBadgerDB = new HoneyBadgerDbContext();
             using (HoneyBadgerDB)
             {
                 HoneyProduct product = HoneyBadgerDB.HoneyProducts.FirstOrDefault(p => p.HoneyId == productID);

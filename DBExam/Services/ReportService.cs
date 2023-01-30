@@ -25,7 +25,7 @@ namespace DBExam.Services
         }
         public ConsoleTable ShowAllDepartmentProducts(int departmentID)
         {
-            using (HoneyBadgerDB)
+            using (new HoneyBadgerDbContext())
             {
                 List<HoneyProduct> departmentProducts = HoneyBadgerDB.HoneyProducts.Where(p => p.DepartmentID == departmentID).ToList();
                 string departmentName = DepartmentsRepository.Retrieve(departmentID).DepartmentName;
@@ -39,7 +39,7 @@ namespace DBExam.Services
         }
         public ConsoleTable ShowAllDepartmentSuppliers(int departmentID)
         {
-            using (HoneyBadgerDB)
+            using (new HoneyBadgerDbContext())
             {
                 List<Supplier> departmentSuppliers = HoneyBadgerDB.Suppliers.Where(s => s.DepartmentSuppliers.Any(d => d.DepartmentId == departmentID)).ToList();
                 string departmentName = DepartmentsRepository.Retrieve(departmentID).DepartmentName;
@@ -47,6 +47,62 @@ namespace DBExam.Services
                 foreach (Supplier supplier in departmentSuppliers)
                 {
                     resString.AddRow(supplier.SupplierId, supplier.SupplierName, supplier.Address, departmentName);
+                }
+                return resString;
+            }
+        }
+        public ConsoleTable ShowAllProductSuppliers(int productID)
+        {
+            using (new HoneyBadgerDbContext())
+            {
+                List<Supplier> productSuppliers = HoneyBadgerDB.Suppliers.Where(s => s.HoneyProductSuppliers.Any(p => p.HoneyProductId == productID)).ToList();
+                string productName = HoneyProductsRepository.Retrieve(productID).HoneyName;
+                ConsoleTable resString = new ConsoleTable("SupplierId", "SupplierName", "SupplierAddress", "ProductName");
+                foreach (Supplier supplier in productSuppliers)
+                {
+                    resString.AddRow(supplier.SupplierId, supplier.SupplierName, supplier.Address, productName);
+                }
+                return resString;
+            }
+        }
+        public ConsoleTable ShowAllDepartments()
+        {
+            using (new HoneyBadgerDbContext())
+            {
+                List<Department> departments = HoneyBadgerDB.Departments.ToList();
+             
+                ConsoleTable resString = new ConsoleTable("DepartmentID", "DepartmentName", "DepartmentAddress");
+                foreach (Department department in departments)
+                {
+                    resString.AddRow(department.DepartmentId, department.DepartmentName, department.DepartmentAddress);
+                }
+                return resString;
+            }
+        }
+        public ConsoleTable ShowAllSuppliers()
+        {
+            using (new HoneyBadgerDbContext())
+            {
+                List<Supplier> suppliers = HoneyBadgerDB.Suppliers.ToList();
+
+                ConsoleTable resString = new ConsoleTable("SupplierID", "SupplierName", "SupplierAddress");
+                foreach (Supplier supplier in suppliers)
+                {
+                    resString.AddRow(supplier.SupplierId, supplier.SupplierName, supplier.Address);
+                }
+                return resString;
+            }
+        }
+        public ConsoleTable ShowAllProducts()
+        {
+            using (new HoneyBadgerDbContext())
+            {
+                List<HoneyProduct> products = HoneyBadgerDB.HoneyProducts.ToList();
+
+                ConsoleTable resString = new ConsoleTable("HoneyId", "HoneyName", "PurchasePrice", "SellPrice");
+                foreach (HoneyProduct product in products)
+                {
+                    resString.AddRow(product.HoneyId, product.HoneyName, product.PurchasePrice, product.SellPrice);
                 }
                 return resString;
             }

@@ -70,7 +70,8 @@ namespace DBExam.Services
                 if (department != null && supplier != null)
                 {
                     departSupplier.Supplier = supplier;
-                    departSupplier.Department = department;  
+                    departSupplier.Department = department;
+                    HoneyBadgerDB.DepartmentSuppliers.Add(departSupplier);
                     HoneyBadgerDB.SaveChanges();
                 }
                 else
@@ -91,7 +92,9 @@ namespace DBExam.Services
                 {
                     departSupplier.Supplier = supplier;
                     departSupplier.Department = department;
+                    HoneyBadgerDB.DepartmentSuppliers.Add(departSupplier);
                     HoneyBadgerDB.SaveChanges();
+                    Console.WriteLine($"Supplier {supplier.SupplierName} was assingned to {department.DepartmentName} department");
                 }
                 else
                 {
@@ -109,7 +112,7 @@ namespace DBExam.Services
                 {
                     Department prodDepartment = HoneyBadgerDB.Departments.FirstOrDefault(d => d.DepartmentId == product.DepartmentID);
                     List<DepartmentSupplier> departmentSuppliers = prodDepartment.DepartmentSuppliers;
-                    List<HoneyProductSupplier> productSuppliers = new List<HoneyProductSupplier>() { };
+                    List<HoneyProductSupplier> prodSuppliers = new List<HoneyProductSupplier>() { };
                     //Delete previous suppliers 
                     //HoneyBadgerDB.HoneyProductsSupliers.RemoveRange(HoneyBadgerDB.HoneyProductsSupliers.Where(ps => ps.HoneyProductId == productID)); If it is big set it could run out of memory
                     HoneyBadgerDB.HoneyProductsSupliers.FromSqlRaw($"DELETE FROM dbo.HoneyProductsSupliers WHERE HoneyProductId = {productID}");
@@ -120,10 +123,11 @@ namespace DBExam.Services
                         HoneyProductSupplier honeyProductSupplier = new HoneyProductSupplier();
                         honeyProductSupplier.Supplier = departmentSupplier.Supplier;
                         honeyProductSupplier.HoneyProduct = product;
-                        productSuppliers.Add(honeyProductSupplier);
+                        prodSuppliers.Add(honeyProductSupplier);
                     }
-                    product.HoneyProductSuppliers = productSuppliers;
+                    HoneyBadgerDB.HoneyProductsSupliers.AddRange(prodSuppliers);
                     HoneyBadgerDB.SaveChanges();
+
                 }
 
                 else

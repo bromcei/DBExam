@@ -17,6 +17,11 @@ while (userInput != "quit")
     Console.WriteLine("Press 5 to add new Product");
     Console.WriteLine("Press 6 to add new Supplier");
     Console.WriteLine("Press 7 to assign Supplier to Department");
+    Console.WriteLine("Press 8 to transfer Product to other Department(changes suppliers too)");
+
+    Console.WriteLine("Press 9 to list all department Products");
+    Console.WriteLine("Press 10 to list all department Suppliers");
+    Console.WriteLine("Press 11 to list all Product Suppliers");
 
     Console.WriteLine("Type \"quit\" to quit application");
 
@@ -60,6 +65,7 @@ while (userInput != "quit")
             if (decimal.TryParse(purchasePriceString, out purchasePrice) && int.TryParse(departmentIDString, out departmentID)) {
                 HoneyProduct newProd = new HoneyProduct(productName, purchasePrice);
                 RecordEditorService.AddNewHoneyProduct(newProd, departmentID);
+                RecordEditorService.AssignDepartmentSuppliersToProduct(RecordEditorService.HoneyProductsRepository.Retrieve(productName).HoneyId);
                 Console.WriteLine($"Product {productName} was add to db.");
             }
             else
@@ -86,6 +92,88 @@ while (userInput != "quit")
                     RecordEditorService.SuppliersRepository.Retrieve(supplierName).SupplierId,
                     departmentIDtoAssign);
                 Console.WriteLine("Supplier assigned to designated department.");
+            }
+            break;
+
+        case "7":
+            Console.WriteLine("Assign Supplier to Department");
+            Console.WriteLine("Supplier ID: ");
+            string supplierIDString = Console.ReadLine();
+            Console.WriteLine("Department ID: ");
+            string departmentIDstring = Console.ReadLine();
+            int supplierID;
+            int departmentID1;
+
+            if (int.TryParse(supplierIDString, out supplierID) && int.TryParse(departmentIDstring, out departmentID1)) {
+                RecordEditorService.AssignSupplierToDepartment(supplierID, departmentID1);
+            }
+            else
+            {
+                Console.WriteLine("Bad input format");
+            }
+            break;
+
+        case "8":
+            Console.WriteLine("Transfer Product to Department");
+            Console.WriteLine("Product ID: ");
+            string prodIDString = Console.ReadLine();
+            Console.WriteLine("Department ID: ");
+            string departmentIDstringP = Console.ReadLine();
+            int prodID;
+            int departmentID2;
+
+            if (int.TryParse(prodIDString, out prodID) && int.TryParse(departmentIDstringP, out departmentID2))
+            {
+                RecordEditorService.ChangeProductDepartmentAndSuppliers(prodID, departmentID2);
+            }
+            else
+            {
+                Console.WriteLine("Bad input format");
+            }
+            break;
+
+        case "9":
+            Console.WriteLine("Department ID: ");
+            string departmentIDProductsString = Console.ReadLine();
+            int departmentIDProducts;
+
+            if (int.TryParse(departmentIDProductsString, out departmentIDProducts))
+            {
+                Console.WriteLine(ReportService.ShowAllDepartmentProducts(departmentIDProducts));
+            }
+            else
+            {
+                Console.WriteLine("Bad input format");
+            }
+            break;
+
+        case "10":
+            Console.WriteLine("Department ID: ");
+            string departmentIDSuppliersString = Console.ReadLine();
+            int departmentIDSuppliers;
+
+            if (int.TryParse(departmentIDSuppliersString, out departmentIDSuppliers))
+            {
+                Console.WriteLine(ReportService.ShowAllDepartmentSuppliers(departmentIDSuppliers));
+            }
+            else
+            {
+                Console.WriteLine("Bad input format");
+            }
+            break;
+
+        case "11":
+            Console.WriteLine("Product ID: ");
+            string productIDSuppliersString = Console.ReadLine();
+            int productIDSuppliers;
+
+            if (int.TryParse(productIDSuppliersString, out productIDSuppliers))
+            {
+                Console.WriteLine(ReportService.ShowAllProductSuppliers(productIDSuppliers));
+            }
+            else
+            {
+                Console.WriteLine("Bad input format");
             }
             break;
 

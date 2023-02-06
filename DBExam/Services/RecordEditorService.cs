@@ -42,7 +42,7 @@ namespace DBExam.Services
                 }
             }
         }
-        public void AddNewHoneyProduct(HoneyProduct honeyProduct, int departmentID)
+        public int AddNewHoneyProduct(HoneyProduct honeyProduct, int departmentID)
         {
             HoneyBadgerDbContext HoneyBadgerDB = new HoneyBadgerDbContext();
             using (HoneyBadgerDB)
@@ -52,12 +52,20 @@ namespace DBExam.Services
                 {
                     department.HoneyProducts.Add(honeyProduct);
                     HoneyBadgerDB.SaveChanges();
+                    return honeyProduct.HoneyId;
                 }
+                return -1;
             }
         }
-        public void AddNewHoneySupplier(Supplier supplier)
+        public int AddNewHoneySupplier(Supplier supplier)
         {
-            SuppliersRepository.AddNewSupplier(supplier);
+            HoneyBadgerDbContext HoneyBadgerDB = new HoneyBadgerDbContext();
+            using (HoneyBadgerDB)
+            {
+                HoneyBadgerDB.Suppliers.Add(supplier);
+                HoneyBadgerDB.SaveChanges();
+                return supplier.SupplierId;
+            }
         }
         public void AssignSupplierToDepartment(string supplierName, string departmentName)
         {
@@ -127,7 +135,6 @@ namespace DBExam.Services
                     }
                     HoneyBadgerDB.HoneyProductsSupliers.AddRange(prodSuppliers);
                     HoneyBadgerDB.SaveChanges();
-
                 }
 
                 else

@@ -119,7 +119,7 @@ namespace DBExam.Services
                 if (product != null)
                 {
                     Department prodDepartment = HoneyBadgerDB.Departments.FirstOrDefault(d => d.DepartmentId == product.DepartmentID);
-                    List<DepartmentSupplier> departmentSuppliers = prodDepartment.DepartmentSuppliers;
+                    List<DepartmentSupplier> departmentSuppliers = HoneyBadgerDB.DepartmentSuppliers.Where(d => d.DepartmentId == product.DepartmentID).ToList();
                     List<HoneyProductSupplier> prodSuppliers = new List<HoneyProductSupplier>() { };
                     //Delete previous suppliers 
                     //HoneyBadgerDB.HoneyProductsSupliers.RemoveRange(HoneyBadgerDB.HoneyProductsSupliers.Where(ps => ps.HoneyProductId == productID)); If it is big set it could run out of memory
@@ -129,7 +129,7 @@ namespace DBExam.Services
                     foreach (DepartmentSupplier departmentSupplier in departmentSuppliers)
                     {
                         HoneyProductSupplier honeyProductSupplier = new HoneyProductSupplier();
-                        honeyProductSupplier.Supplier = departmentSupplier.Supplier;
+                        honeyProductSupplier.Supplier = SuppliersRepository.Retrieve(departmentSupplier.SupplierId);
                         honeyProductSupplier.HoneyProduct = product;
                         prodSuppliers.Add(honeyProductSupplier);
                     }

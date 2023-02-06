@@ -55,14 +55,23 @@ namespace DBExam.Services
         {
             using (new HoneyBadgerDbContext())
             {
-                List<Supplier> productSuppliers = HoneyBadgerDB.Suppliers.Where(s => s.HoneyProductSuppliers.Any(p => p.HoneyProductId == productID)).ToList();
-                string productName = HoneyProductsRepository.Retrieve(productID).HoneyName;
                 ConsoleTable resString = new ConsoleTable("SupplierId", "SupplierName", "SupplierAddress", "ProductName");
-                foreach (Supplier supplier in productSuppliers)
+                List<Supplier> productSuppliers = HoneyBadgerDB.Suppliers.Where(s => s.HoneyProductSuppliers.Any(p => p.HoneyProductId == productID)).ToList();
+                if(productSuppliers.Count == 0)
                 {
-                    resString.AddRow(supplier.SupplierId, supplier.SupplierName, supplier.Address, productName);
+                    return resString;
                 }
-                return resString;
+                else
+                {
+                    string? productName = HoneyProductsRepository.Retrieve(productID).HoneyName;
+                    
+                    foreach (Supplier supplier in productSuppliers)
+                    {
+                        resString.AddRow(supplier.SupplierId, supplier.SupplierName, supplier.Address, productName);
+                    }
+                    return resString;
+                }
+
             }
         }
         public ConsoleTable ShowAllDepartments()

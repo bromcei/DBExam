@@ -30,6 +30,16 @@ namespace DBExam.Repositories
             }
             return supplier;
         }
+        public Supplier Retrieve(int suplierID)
+        {
+            Supplier supplier;
+            HoneyBadgerDbContext HoneyBadgerDB = new HoneyBadgerDbContext();
+            using (HoneyBadgerDB)
+            {
+                supplier = HoneyBadgerDB.Suppliers.FirstOrDefault(s => s.SupplierId == suplierID);
+            }
+            return supplier;
+        }
         public void AddNewSupplier(Supplier suplier)
         {
             HoneyBadgerDbContext HoneyBadgerDB = new HoneyBadgerDbContext();

@@ -19,14 +19,14 @@ namespace DBExam.Classes
         public Department ProductDepartment { get; set; }
         public List<HoneyProductSupplier> HoneyProductSuppliers { get; set; }
 
-        public HoneyProduct() { }
+        private HoneyProduct() { }
         public HoneyProduct(string honeyName, decimal purchasePrice)
         {
             HoneyName = honeyName;
             PurchasePrice = purchasePrice;
             SellPrice = purchasePrice * 2.5M;
             HoneyProductSuppliers = new List<HoneyProductSupplier>();
-            //ProductDepartment = productDepartment;
+            
         }
 
     }

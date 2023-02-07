@@ -15,7 +15,7 @@ namespace DBExam.Services
         public DepartmentsRepository DepartmentsRepository { get; set; }
         public HoneyProductsRepository HoneyProductsRepository { get; set; }
         public SuppliersRepository SuppliersRepository { get; set; }
-        public RecordEditorService()
+        public RecordEditorService()// paduot per prams repo's
         {
             DepartmentsRepository = new DepartmentsRepository();
             HoneyProductsRepository = new HoneyProductsRepository();
@@ -54,7 +54,7 @@ namespace DBExam.Services
                     HoneyBadgerDB.SaveChanges();
                     return honeyProduct.HoneyId;
                 }
-                return -1;
+                throw new Exception();
             }
         }
         public int AddNewHoneySupplier(Supplier supplier)
@@ -122,9 +122,7 @@ namespace DBExam.Services
                     List<Supplier> departmentSuppliers = HoneyBadgerDB.DepartmentSuppliers.Where(d => d.DepartmentId == product.DepartmentID).Select(s => s.Supplier).ToList();
                     List<HoneyProductSupplier> prodSuppliers = new List<HoneyProductSupplier>() { };
                     //Delete previous suppliers 
-                    //HoneyBadgerDB.HoneyProductsSupliers.RemoveRange(HoneyBadgerDB.HoneyProductsSupliers.Where(ps => ps.HoneyProductId == productID)); If it is big set it could run out of memory
                     HoneyBadgerDB.HoneyProductsSupliers.FromSqlRaw($"DELETE FROM dbo.HoneyProductsSupliers WHERE HoneyProductId = {productID}");
-
 
                     foreach (Supplier departmentSupplier in departmentSuppliers)
                     {

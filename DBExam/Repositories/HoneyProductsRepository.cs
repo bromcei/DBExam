@@ -10,7 +10,6 @@ namespace DBExam.Repositories
 {
     public class HoneyProductsRepository
     {
-        public HoneyBadgerDbContext HoneyBadgerDB { get; set; }
 
         public List<HoneyProduct> Retrieve()
         {

@@ -11,18 +11,15 @@ namespace DBExam.Repositories
 {
     public class DepartmentsRepository
     {
-        public HoneyBadgerDbContext HoneyBadgerDB { get; set; }
 
         public List<Department> Retrieve()
-        {
-            List<Department> departments;
-            HoneyBadgerDbContext HoneyBadgerDB = new HoneyBadgerDbContext();
-            using (HoneyBadgerDB)
+        {       
+            using (HoneyBadgerDbContext HoneyBadgerDB = new HoneyBadgerDbContext())
             {
-                departments = HoneyBadgerDB.Departments.ToList();
+                return HoneyBadgerDB.Departments.ToList();
             }
-            return departments; 
         }
+
         public Department Retrieve(string departmentName)
         {
             Department department;

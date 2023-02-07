@@ -18,7 +18,6 @@ while (userInput != "quit")
     Console.WriteLine("Press 6 to add new Supplier");
     Console.WriteLine("Press 7 to assign Supplier to Department");
     Console.WriteLine("Press 8 to transfer Product to other Department(changes suppliers too)");
-
     Console.WriteLine("Press 9 to list all department Products");
     Console.WriteLine("Press 10 to list all department Suppliers");
     Console.WriteLine("Press 11 to list all Product Suppliers");

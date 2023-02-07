@@ -17,18 +17,11 @@ namespace DBExam.Classes
         public List<HoneyProduct> HoneyProducts { get; set; }
         public Department(string departmentName, string departmentAddress)
         {
+            // uzsetint private viska 
             DepartmentName = departmentName;
             DepartmentAddress = departmentAddress;
             DepartmentSuppliers = new List<DepartmentSupplier>();
             HoneyProducts = new List<HoneyProduct>();
-        }
-        public void AddProduct(HoneyProduct product)
-        {
-            HoneyProducts.Add(product);
-        }
-        public void AddProducts(List<HoneyProduct> products)
-        {
-            HoneyProducts.AddRange(products);
         }
     }
 }

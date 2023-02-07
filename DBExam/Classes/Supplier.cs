@@ -15,7 +15,7 @@ namespace DBExam.Classes
         public string Address { get; set; }
         public List<DepartmentSupplier> DepartmentSuppliers { get; set; }
         public List<HoneyProductSupplier> HoneyProductSuppliers { get; set; }
-        public Supplier() { }
+        private Supplier() { }
         public Supplier(string supplierName, string address)
         {
             SupplierName = supplierName;
